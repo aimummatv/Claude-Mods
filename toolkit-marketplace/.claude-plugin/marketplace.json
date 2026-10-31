@@ -1,0 +1,11 @@
+{
+  "name": "toolkit-local",
+  "owner": { "name": "Aman Kumar" },
+  "plugins": [
+    {
+      "name": "toolkit",
+      "source": "./plugins/toolkit",
+      "description": "Voice prompt cleaner, Helper Desk, Keep Warm, Project Map, Plan Usage, Skill Helper and Auto Model in one mod."
+    }
+  ]
+}
