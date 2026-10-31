@@ -162,7 +162,9 @@ export async function refreshUsage($: EngineInterface, force = false): Promise<v
   const live = (await $.session.usage()).rateLimits
   const five = live.find(r => r.kind === 'five_hour')
   const week = live.find(r => r.kind === 'seven_day')
-  if (force || now - lastScan > 60_000) {
+  // Transcripts are scanned each minute in estimate mode; with LIVE data only every 10 minutes (cap learning).
+  const every = five || week ? 600_000 : 60_000
+  if (force || now - lastScan > every) {
     cachedEvents = await scanTranscripts($, now)
     lastScan = now
   }

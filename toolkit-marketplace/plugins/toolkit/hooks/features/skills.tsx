@@ -63,17 +63,24 @@ export const howToOf = (body: string, max = 3): string =>
     .join(' ')
 
 const STOP = new Set(
-  'the and for with that this from into your you are was were have has had can will would should could about make made using use need want like just also then than them they there their what when where which while who why how not but all any each our out get got its into more most some such only very please help thing things stuff really okay yeah'.split(
+  'an is to of in on it at be by or as so do if my me we up no go us am the and for with that this from into your you are was were have has had can will would should could about make made using use need want like just also then than them they there their what when where which while who why how not but all any each our out get got its into more most some such only very please help thing things stuff really okay yeah'.split(
     ' ',
   ),
 )
 
-export const stem = (w: string): string => w.replace(/(ings?|ed|es|s)$/, '').replace(/(.)\1$/, '$1')
+export const stem = (w: string): string => {
+  if (w.length > 4 && w.endsWith('ies')) return `${w.slice(0, -3)}y`
+  if (w.length > 4 && /(?:s|x|z|ch|sh)es$/.test(w)) return w.slice(0, -2)
+  if (w.length > 5 && w.endsWith('ing')) return w.slice(0, -3)
+  if (w.length > 4 && w.endsWith('ed')) return w.slice(0, -2)
+  if (w.length > 3 && w.endsWith('s') && !w.endsWith('ss')) return w.slice(0, -1)
+  return w
+}
 
 export const tokenize = (text: string): string[] =>
   (text.toLowerCase().match(/[a-z][a-z0-9+#.-]{1,}/g) ?? [])
     .map(w => w.replace(/[.-]+$/, ''))
-    .filter(w => w.length >= 3 && !STOP.has(w))
+    .filter(w => w.length >= 2 && !STOP.has(w))
     .map(stem)
 
 const EXT_WORDS: Record<string, string[]> = {
@@ -122,12 +129,14 @@ export const filterSkills = (skills: readonly SkillInfo[], query: string): Skill
   return skills.filter(s => s.name.toLowerCase().includes(q) || s.description.toLowerCase().includes(q))
 }
 
+const ACRONYMS = new Set(['ui', 'ux', 'api', 'pdf', 'css', 'html', 'seo', 'ai', 'mcp', 'sql', 'pr', 'qa', 'cli', 'sdk'])
+
 export const prettyName = (name: string): string =>
   name
     .split(':')
     .at(-1)!
     .split(/[-_]/)
-    .map(w => (w.length <= 3 ? w.toUpperCase() : w[0]!.toUpperCase() + w.slice(1)))
+    .map(w => (ACRONYMS.has(w.toLowerCase()) ? w.toUpperCase() : w[0]!.toUpperCase() + w.slice(1)))
     .join(' ')
 
 // ---------------------------------------------------------------------------

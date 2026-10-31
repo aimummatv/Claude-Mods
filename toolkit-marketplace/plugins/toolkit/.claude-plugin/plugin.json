@@ -2,6 +2,9 @@
   "name": "toolkit",
   "version": "1.0.0",
   "description": "Saves tokens, keeps you informed: voice prompt cleaner, Helper Desk agent monitor, Keep Warm, Project Map + Chat Meter, Plan Usage, Skill Helper, Auto Model.",
-  "author": { "name": "Aman Kumar" },
-  "types": "./types/index.d.ts"
+  "author": {
+    "name": "Aman Kumar"
+  },
+  "types": "./types/index.d.ts",
+  "license": "MIT"
 }

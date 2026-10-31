@@ -57,7 +57,8 @@ export const TOAST_SCRIPT = [
 export async function notify($: EngineInterface, title: string, body: string): Promise<string> {
   try {
     const sent = await $.ui.notify(body, { title })
-    if (sent.isSent) return `engine:${sent.channel}`
+    // A bell alone shows no text, so it does not count as a notification here.
+    if (sent.isSent && sent.channel !== 'terminal_bell') return `engine:${sent.channel}`
   } catch {
     // fall through
   }

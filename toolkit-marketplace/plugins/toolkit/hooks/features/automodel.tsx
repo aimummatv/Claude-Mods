@@ -77,7 +77,7 @@ export const readSignals = (x: SignalInput): Signals => {
   if (n > 250) {
     score += 2
     reasons.push(`${n} words`)
-  } else if (n < 25) {
+  } else if (n < 25 && !PLAN_RE.test(x.text)) {
     score -= 1
     reasons.push('short message')
   }

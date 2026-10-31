@@ -143,6 +143,8 @@ export const register: Register = on => {
       const id = e.agentId
       const go = (await guard($, 'helper-desk', () => onAgentStepStart($, id))) ?? true
       if (!go) {
+        // Stopped: no request is made; the step ends the agent's turn.
+        yield { kind: 'stop' as const, stopReason: 'end_turn' as const, usage: null }
         const stopped: TurnStepResult = { turnId: e.turnId, index: e.index, answer: '', toolUses: [], stopReason: 'end_turn', usage: null }
         return stopped
       }
